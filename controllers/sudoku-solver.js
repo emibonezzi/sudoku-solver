@@ -19,7 +19,6 @@ class SudokuSolver {
         rowCounter++;
       }
 
-
       if (row === rows[rowCounter]) {
         if (puzzleString[i] === value) {
           return false;
@@ -30,7 +29,23 @@ class SudokuSolver {
     return true;
   }
 
-  checkColPlacement(puzzleString, row, column, value) {}
+  checkColPlacement(puzzleString, row, column, value) {
+    let colCounter = 0;
+    for (let i = 0; i < puzzleString.length; i++) {
+      if (colCounter > 9) {
+        colCounter = 1;
+      }
+      if (column == colCounter) {
+        if (value === puzzleString[i]) {
+          return false;
+        }
+      }
+
+      colCounter++;
+    }
+
+    return true;
+  }
 
   checkRegionPlacement(puzzleString, row, column, value) {}
 
@@ -38,9 +53,12 @@ class SudokuSolver {
 }
 
 let solver = new SudokuSolver();
-let result = solver.checkRowPlacement("1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.", "A", "4", "5")
-console.log(result)
+let result = solver.checkColPlacement(
+  "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.",
+  "B",
+  "2",
+  "2"
+);
+console.log(result);
 
 module.exports = SudokuSolver;
-
-
