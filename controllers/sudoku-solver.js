@@ -47,17 +47,41 @@ class SudokuSolver {
     return true;
   }
 
-  checkRegionPlacement(puzzleString, row, column, value) {}
+  checkRegionPlacement(puzzleString, row, column, value) {
+    let rowsRegions = [["A", "B", "C"], ["D", "E", "F"], ["G", "H", "I"]];
+    let colsRegions = [["1","2","3"], ["4","5","6"], ["7","8","9"]];
+    let colsRegionsCounter = 0;
+    let rowsRegionsCounter = 0;
+
+    for (let i = 0; i < puzzleString.length; i++) {
+      if (i % 27 === 0 && i != 0) {
+        rowsRegionsCounter++;
+      }
+      if (i % 3 === 0 && i != 0) {
+        colsRegionsCounter++;
+      }
+      if (i % 9 === 0 && i != 0) {
+        colsRegionsCounter = 0;
+      }
+      if (colsRegions[colsRegionsCounter].includes(column) && rowsRegions[rowsRegionsCounter].includes(row)) {
+        if (value === puzzleString[i]) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
 
   solve(puzzleString) {}
 }
 
 let solver = new SudokuSolver();
-let result = solver.checkColPlacement(
+let result = solver.checkRegionPlacement(
   "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.",
-  "B",
-  "2",
-  "2"
+  "D",
+  "1",
+  "6"
 );
 console.log(result);
 
