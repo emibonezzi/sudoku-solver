@@ -76,7 +76,7 @@ class SudokuSolver {
         rowsRegions[rowsRegionsCounter].includes(row)
       ) {
         if (value === puzzleString[i]) {
-          console.log("INVALID REGION PLACEMENT!", value, puzzleString[i]);
+          //console.log("INVALID REGION PLACEMENT!", value, puzzleString[i]);
           return false;
         }
       }
@@ -86,13 +86,26 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
+    // CHECK IF PUZZLE STRING IS SOLVED OR NOT
+    if (!puzzleString.includes(".")) {
+      console.log("solved");
+      let solution = ""
+      console.log(puzzleString);
+      console.log(puzzleString === solution)
+      return true;
+    }
+
+    // START GUESSING PROCESS
 
     let guesses = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
     let rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
     let rowCounter = 0;
     let colCounter = 1;
     let puzzleArr = puzzleString.split("");
+    let solutionsObj = {};
+    let solutionStr = "";
 
+    // FILL SQUARES WITH JUST ONE POSSIBLE SOLUTION
     for (let i = 0; i < puzzleArr.length; i++) {
       let row;
       let solutions = 0;
@@ -107,25 +120,40 @@ class SudokuSolver {
 
       row = rows[rowCounter];
 
-      //console.log("Checking", row, colCounter, "->", puzzleArr[i])
+      //console.log("Checking", row, colCounter, "->", puzzleArr[i]);
 
       if (puzzleArr[i] === ".") {
         let solArr = [];
         for (let n = 0; n < guesses.length; n++) {
+          //console.log("Testing", guesses[n], "for cell", row, colCounter);
           if (
             this.checkColPlacement(puzzleString, row, colCounter, guesses[n]) &&
             this.checkRowPlacement(puzzleString, row, colCounter, guesses[n]) &&
-            this.checkRegionPlacement(puzzleString, row, colCounter, guesses[n])
+            this.checkRegionPlacement(puzzleString, row, colCounter.toString(), guesses[n])
           ) {
+            /* console.log(
+              "Number",
+              guesses[n],
+              "is a valid guess for",
+              row,
+              colCounter
+            ); */
             solutions++;
             solArr.push(guesses[n]);
           }
         }
 
-        //console.log(solutions, "solutions available for", row, colCounter, solArr)
-
         if (solArr.length === 1) {
           puzzleArr[i] = solArr[0];
+        }
+
+        solutionsObj[`${row}${colCounter}`] = {
+          solutions: solArr,
+          indexStr: i,
+        };
+
+        if (solArr.length > 1) {
+          // console.log(solutions, "solutions available for", row, colCounter, solArr)
         }
 
         if (solArr.length === 0) {
@@ -136,17 +164,26 @@ class SudokuSolver {
 
       colCounter++;
     }
-    console.log(puzzleArr.join(""))
+
+    // CREATE TEMP SOLUTION STRING
+    solutionStr = puzzleArr.join("");
+    console.log(solutionStr)
+    console.log(solutionsObj)
+
+
+    // CALL THE FUNCTION INSIDE THE FUNCTION PASSING THE TEMP SOLUTION STRING
+    this.solve(solutionStr)
   }
 }
 
 let solver = new SudokuSolver();
-let result = solver.solve(
-  "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37."
+solver.solve(
+  ".39...12....9.7...8..4.1..6.42...79...........91...54.5..1.9..3...8.5....14...87.",
+  "A",
+  "9",
+  "8"
 );
-let solution =
-  "135762984946381257728459613694517832812936745357824196473298561581673429269145378";
-  
-console.log(result);
+
+
 
 module.exports = SudokuSolver;
