@@ -89,9 +89,10 @@ class SudokuSolver {
     // CHECK IF PUZZLE STRING IS SOLVED OR NOT
     if (!puzzleString.includes(".")) {
       console.log("solved");
-      let solution = ""
+      let solution =
+        "568913724342687519197254386685479231219538467734162895926345178473891652851726943";
       console.log(puzzleString);
-      console.log(puzzleString === solution)
+      console.log(puzzleString === solution);
       return true;
     }
 
@@ -129,7 +130,12 @@ class SudokuSolver {
           if (
             this.checkColPlacement(puzzleString, row, colCounter, guesses[n]) &&
             this.checkRowPlacement(puzzleString, row, colCounter, guesses[n]) &&
-            this.checkRegionPlacement(puzzleString, row, colCounter.toString(), guesses[n])
+            this.checkRegionPlacement(
+              puzzleString,
+              row,
+              colCounter.toString(),
+              guesses[n]
+            )
           ) {
             /* console.log(
               "Number",
@@ -157,7 +163,7 @@ class SudokuSolver {
         }
 
         if (solArr.length === 0) {
-          console.log("Puzzle unsolvable");
+          console.log("Puzzle unsolvable because", row, colCounter, "has no possible candidates.");
           return false;
         }
       }
@@ -167,23 +173,34 @@ class SudokuSolver {
 
     // CREATE TEMP SOLUTION STRING
     solutionStr = puzzleArr.join("");
-    console.log(solutionStr)
-    console.log(solutionsObj)
+    console.log(solutionsObj);
 
+    // CHECK IF THERE'S AT LEAST ONE CELL WITH JUST ONE POSSIBLE ENTRY
+    let uniqueSolutions =
+      Object.keys(solutionsObj).filter(
+        (item) => solutionsObj[item].solutions.length === 1
+      ).length > 0;
 
-    // CALL THE FUNCTION INSIDE THE FUNCTION PASSING THE TEMP SOLUTION STRING
-    this.solve(solutionStr)
+    if (uniqueSolutions) {
+      console.log(
+        "At least one cell with one unique solution ->",
+        uniqueSolutions
+      );
+
+      // CALL THE FUNCTION INSIDE THE FUNCTION PASSING THE TEMP SOLUTION STRING
+      this.solve(solutionStr);
+    } else {
+      console.log("This Sudoku doesn't have one unique solution.");
+    }
   }
 }
 
 let solver = new SudokuSolver();
 solver.solve(
-  ".39...12....9.7...8..4.1..6.42...79...........91...54.5..1.9..3...8.5....14...87.",
+  "..9.287..8.6..4..5..3.....46.........2.71345.........23.....5..9..4..8.7..125.3..",
   "A",
   "9",
   "8"
 );
-
-
 
 module.exports = SudokuSolver;
