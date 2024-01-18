@@ -3,10 +3,21 @@ class SudokuSolver {
     let sudokuRegex = /^[.1-9]+(?!\D+)[.1-9]+$/;
     let longEnough = puzzleString.length === 81;
 
-    if (longEnough && sudokuRegex.test(puzzleString)) {
-      return true;
+    if (longEnough) {
+      if (sudokuRegex.test(puzzleString)) {
+        if (this.solve(puzzleString)) {
+          return { status: true, message: "Valid puzzle" };
+        } else {
+          return { status: true, message: "Puzzle cannot be solved" };
+        }
+      } else {
+        return { status: false, message: "Invalid characters in puzzle" };
+      }
     } else {
-      return false;
+      return {
+        status: false,
+        message: "Expected puzzle to be 81 characters long",
+      };
     }
   }
 
@@ -15,7 +26,7 @@ class SudokuSolver {
     let rowCounter = 0;
 
     if (!rows.includes(row)) {
-      console.log("INVALID ROW")
+      console.log("INVALID ROW");
       return false;
     }
 
@@ -38,8 +49,8 @@ class SudokuSolver {
   checkColPlacement(puzzleString, row, column, value) {
     let colCounter = 1;
 
-    if (!["1","2","3","4","5","6","7","8","9"].includes(column)) {
-      console.log("INVALID COLUMN")
+    if (!["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(column)) {
+      console.log("INVALID COLUMN");
       return false;
     }
 
@@ -101,7 +112,8 @@ class SudokuSolver {
     // CHECK IF PUZZLE STRING IS SOLVED OR NOT
     if (!puzzleString.includes(".")) {
       console.log("solved");
-      let solution = "568913724342687519197254386685479231219538467734162895926345178473891652851726943";
+      let solution =
+        "568913724342687519197254386685479231219538467734162895926345178473891652851726943";
       console.log(puzzleString);
       console.log(puzzleString === solution);
       return true;
@@ -208,7 +220,6 @@ class SudokuSolver {
     } else {
       console.log("This Sudoku doesn't have one unique solution.");
       return false;
-      
     }
   }
 }
