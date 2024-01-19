@@ -5,10 +5,12 @@ class SudokuSolver {
 
     if (longEnough) {
       if (sudokuRegex.test(puzzleString)) {
-        if (this.solve(puzzleString)) {
-          return { status: true, message: "Valid puzzle" };
+        let solvable = this.solve(puzzleString);
+        console.log(solvable);
+        if (solvable) {
+          return { status: true, message: "Valid puzzle", solution: solvable };
         } else {
-          return { status: true, message: "Puzzle cannot be solved" };
+          return { status: false, message: "Puzzle cannot be solved" };
         }
       } else {
         return { status: false, message: "Invalid characters in puzzle" };
@@ -19,6 +21,34 @@ class SudokuSolver {
         message: "Expected puzzle to be 81 characters long",
       };
     }
+  }
+
+  getIndex(puzzleString, row, column, value) {
+    let rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
+    let map = {};
+    let rowCounter = 0;
+    let colCounter = 1;
+
+    for (let i = 0; i < puzzleString.length; i++) {
+      let row;
+
+      if (i % 9 === 0 && i != 0) {
+        colCounter = 1;
+      }
+
+      if (i % 9 === 0 && i != 0) {
+        rowCounter++;
+      }
+
+      row = rows[rowCounter];
+
+      map[`${row}${colCounter}`] = {value: puzzleString[i], indexStr: i}
+      colCounter++;
+    }
+    console.log(map)
+    console.log(map[`${row}${column}`].indexStr)
+
+    return map[`${row}${column}`].indexStr;
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
@@ -37,7 +67,9 @@ class SudokuSolver {
       }
 
       if (row === rows[rowCounter]) {
+        //console.log(puzzleString[i], "->", value);
         if (puzzleString[i] === value) {
+          //console.log(puzzleString[i], "->", value, "✅");
           return false;
         }
       }
@@ -49,17 +81,12 @@ class SudokuSolver {
   checkColPlacement(puzzleString, row, column, value) {
     let colCounter = 1;
 
-    if (!["1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(column)) {
-      console.log("INVALID COLUMN");
-      return false;
-    }
-
     for (let i = 0; i < puzzleString.length; i++) {
       if (i % 9 === 0 && i != 0) {
         colCounter = 1;
       }
 
-      if (column == colCounter) {
+      if (Number(column) === colCounter) {
         if (value === puzzleString[i]) {
           return false;
         }
@@ -112,11 +139,11 @@ class SudokuSolver {
     // CHECK IF PUZZLE STRING IS SOLVED OR NOT
     if (!puzzleString.includes(".")) {
       console.log("solved");
-      let solution =
-        "568913724342687519197254386685479231219538467734162895926345178473891652851726943";
+      // let solution =
+      ("568913724342687519197254386685479231219538467734162895926345178473891652851726943");
       console.log(puzzleString);
-      console.log(puzzleString === solution);
-      return true;
+      // console.log(puzzleString === solution);
+      return puzzleString;
     }
 
     // START GUESSING PROCESS
@@ -216,7 +243,7 @@ class SudokuSolver {
       ); */
 
       // CALL THE FUNCTION INSIDE THE FUNCTION PASSING THE TEMP SOLUTION STRING
-      this.solve(solutionStr);
+      return this.solve(solutionStr);
     } else {
       console.log("This Sudoku doesn't have one unique solution.");
       return false;
@@ -225,11 +252,12 @@ class SudokuSolver {
 }
 
 let solver = new SudokuSolver();
-solver.solve(
-  "..9.7...5..21..9..1...28....7...5..1..851.....5....3.......3..68........21.....87",
-  "A",
+
+solver.getIndex(
+  "..9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..",
+  "F",
   "9",
-  "8"
+  "9"
 );
 
 module.exports = SudokuSolver;
