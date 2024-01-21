@@ -28,25 +28,25 @@ module.exports = function (app) {
               puzzle,
               row,
               column,
-              value
+              value,
             );
             let validRowPlacement = solver.checkRowPlacement(
               puzzle,
               row,
               column,
-              value
+              value,
             );
             let validRegionPlacement = solver.checkRegionPlacement(
               puzzle,
               row,
               column,
-              value
+              value,
             );
 
             console.log(
               validColPlacement,
               validRowPlacement,
-              validRegionPlacement
+              validRegionPlacement,
             );
 
             if (
