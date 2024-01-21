@@ -40,85 +40,85 @@ class SudokuSolver {
       colCounter++;
     }
 
-    console.log("NOW CHECKING COLS FOR DUPLICATE...");
+    // console.log("NOW CHECKING COLS FOR DUPLICATE...");
 
     // CHECK COL
     for (let col of cols) {
       colArr = [];
       for (let cell of Object.keys(map)) {
         if (col == cell[1]) {
-          //console.log(col, cell)
-          //console.log(map[cell].value);
+          //// console.log(col, cell)
+          //// console.log(map[cell].value);
           colArr.push(map[cell].value);
         }
       }
 
-      console.log(colArr.filter((item) => item != "."));
+      // console.log(colArr.filter((item) => item != "."));
       let newArr = [...new Set(colArr)];
-      console.log(newArr.filter((item) => item != "."));
+      // console.log(newArr.filter((item) => item != "."));
       if (
         newArr.filter((item) => item != ".").length !=
         colArr.filter((item) => item != ".").length
       ) {
-        console.log("Duplicates found in column");
+        // console.log("Duplicates found in column");
         return false;
       }
     }
 
-    console.log("NOW CHECKING ROWS FOR DUPLICATE...");
+    // console.log("NOW CHECKING ROWS FOR DUPLICATE...");
 
     // CHECK ROWS
     for (let row of rows) {
       rowArr = [];
       for (let cell of Object.keys(map)) {
         if (row === cell[0]) {
-          //console.log(row, cell)
-          //console.log(map[cell].value);
+          //// console.log(row, cell)
+          //// console.log(map[cell].value);
           rowArr.push(map[cell].value);
         }
       }
 
-      console.log(rowArr.filter((item) => item != "."));
+      // console.log(rowArr.filter((item) => item != "."));
       let newArr = [...new Set(rowArr)];
-      console.log(newArr.filter((item) => item != "."));
+      // console.log(newArr.filter((item) => item != "."));
       if (
         newArr.filter((item) => item != ".").length !=
         rowArr.filter((item) => item != ".").length
       ) {
-        console.log("Duplicates found in Rows");
+        // console.log("Duplicates found in Rows");
         return false;
       }
     }
 
     // CHECK REGIONS
 
-    console.log("NOW CHECKING REGIONS FOR DUPLICATE...");
+    // console.log("NOW CHECKING REGIONS FOR DUPLICATE...");
 
     for (let region of regions) {
       regArr = [];
       for (let cell of Object.keys(map)) {
         if (region.includes(cell)) {
-          //console.log(row, cell)
-          //console.log(map[cell].value);
+          //// console.log(row, cell)
+          //// console.log(map[cell].value);
           regArr.push(map[cell].value);
         }
       }
 
-      console.log(regArr);
+      // console.log(regArr);
 
-      console.log(regArr.filter((item) => item != "."));
+      // console.log(regArr.filter((item) => item != "."));
       let newArr = [...new Set(regArr)];
-      console.log(newArr.filter((item) => item != "."));
+      // console.log(newArr.filter((item) => item != "."));
       if (
         newArr.filter((item) => item != ".").length !=
         regArr.filter((item) => item != ".").length
       ) {
-        console.log("Duplicates found in Regions");
+        // console.log("Duplicates found in Regions");
         return false;
       }
     }
 
-    console.log("Puzzle has no duplicates in Rows, Columns, Regions.");
+    // console.log("Puzzle has no duplicates in Rows, Columns, Regions.");
     return true;
   }
 
@@ -269,6 +269,7 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
+
     // CHECK IF PUZZLE STRING IS SOLVED OR NOT
     if (!puzzleString.includes(".")) {
       console.log("solved");
@@ -379,14 +380,14 @@ class SudokuSolver {
       return this.solve(solutionStr);
     } else {
       console.log("This Sudoku doesn't have one unique solution.");
-      console.log(solutionsObj);
+      return false;
     }
   }
 }
 
 let solver = new SudokuSolver();
-solver.validate(
+console.log(solver.solve(
   "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37."
-);
+));
 
 module.exports = SudokuSolver;
